@@ -36,12 +36,12 @@
 
     - name: 5/6] Install git config
       ansible.builtin.copy:
-        src: github/config
+        src: ssh/config
         dest: "{{ lookup('env', 'HOME') }}/.ssh/config"
         mode: 0600
       tags: github
 
-    - name: 6/6] Ensure GitHub is in known_hosts (Standard and Port 443)
+    - name: 6/6] Ensure GitHub is in known_hosts (Standard and Port 443) / no need to input 'yes' when testing the connection
       ansible.builtin.known_hosts:
         name: "{{ item.name }}"
         key: "{{ item.key }}"
