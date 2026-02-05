@@ -1,0 +1,46 @@
+- name: Github Init Playbook
+  gather_facts: no
+  hosts: localhost
+  vars:
+      source_key: "ssh/id_rsa"
+      dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+
+  tasks:
+    
+    - name: 1/5] git user.email
+      git_config:
+        name: user.email
+        scope: global
+        value: "curelesss@gmail.com"
+      tags:
+        - github
+
+    - name: 2/5] git user.name
+      git_config:
+        name: user.name
+        scope: global
+        value: "curelesss"
+      tags:
+        - github
+
+    - name: 3/5] Ensure .ssh directory exists
+      file:
+        dest: "{{ dest_key | dirname }}"
+        mode: 0700
+        state: directory
+      tags:
+        - github
+
+    - name: 4/5] Install ssh key
+      copy:
+        src: "{{ source_key }}"
+        dest: "{{ dest_key }}"
+        mode: 0600
+      tags:
+        - github
+
+    - name: 5/5] Install git config
+      ansible.builtin.command:
+        cmd: cp github/config "{{ lookup('env', 'HOME') }}/.ssh/"
+      tags:
+        - github
