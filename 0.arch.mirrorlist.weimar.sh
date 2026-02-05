@@ -9,7 +9,7 @@ set -euo pipefail
 # ────────────────────────────────────────────────
 
 TARGET="/etc/pacman.d/mirrorlist"
-SOURCE="./mirrorlist/weimar/mirrorlist"           # adjust if filename is different
+SOURCE="./mirrorlist/arch/weimar/mirrorlist"           # adjust if filename is different
 BACKUP_SUFFIX=".bak-$(date +%Y%m%d-%H%M%S)"
 
 # ────────────────────────────────────────────────
