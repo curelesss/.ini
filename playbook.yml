@@ -1,0 +1,11 @@
+---
+# site.yml – main orchestrator playbook
+
+- name: Prepare base system (users, ssh, packages)
+  import_playbook: playbook.ssh.yml
+
+- name: Set up database servers
+  import_playbook: playbook.clone.yml
+
+- name: Set up database servers2
+  import_playbook: playbook.gpg.yml

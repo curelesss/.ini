@@ -1,0 +1,28 @@
+---
+- name: Clone personal repositories into home directory
+  hosts: localhost
+  gather_facts: true
+
+  vars:
+    repos:
+      - repo: "git@github.com:curelesss/.init.git"
+        dest: "{{ ansible_facts['env']['HOME'] }}/.init"
+
+      - repo: "git@github.com:curelesss/.password-store.git"
+        dest: "{{ ansible_facts['env']['HOME'] }}/.password-store"
+
+      - repo: "git@github.com:curelesss/.dotfiles.git"
+        dest: "{{ ansible_facts['env']['HOME'] }}/.dotfiles"
+
+      - repo: "git@github.com:curelesss/dotfiles.git"
+        dest: "{{ ansible_facts['env']['HOME'] }}/dotfiles"
+
+  tasks:
+    - name: Clone repositories if they do not already exist
+      ansible.builtin.git:
+        repo: "{{ item.repo }}"
+        dest: "{{ item.dest }}"
+        update: no
+        accept_hostkey: yes
+      loop: "{{ repos }}"
+

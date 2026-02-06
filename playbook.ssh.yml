@@ -41,3 +41,11 @@
         mode: 0600
       tags: github
 
+    - name: 6/6] Switch .ini repo from HTTPS to SSH
+      community.general.git_config:
+        name: remote.origin.url
+        value: "git@github.com:curelesss/.ini.git"
+        scope: local
+        repo: "{{ ansible_env.HOME }}/.ini"
+      # This ensures the task only runs if the directory actually exists
+      when: (ansible_env.HOME + '/.ini') is directory
