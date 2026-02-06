@@ -6,46 +6,59 @@
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
 
   tasks:
-    - name: 1/6] git user.email
+    - name: 1/8] git Email
       git_config:
         name: user.email
         scope: global
         value: "curelesss@gmail.com"
       tags: github
 
-    - name: 2/6] git user.name
+    - name: 2/8] git Username
       git_config:
         name: user.name
         scope: global
         value: "curelesss"
       tags: github
 
-    - name: 3/6] Ensure .ssh directory exists
+    - name: 3/8] Ensure ~/.ssh directory exists
       file:
         dest: "{{ dest_key | dirname }}"
         mode: 0700
         state: directory
       tags: github
 
-    - name: 4/6] Install ssh key
+    - name: 4/8] Install ssh key
       copy:
         src: "{{ source_key }}"
         dest: "{{ dest_key }}"
         mode: 0600
       tags: github
 
-    - name: 5/6] Install git config
+    - name: 5/8] Install git config
       ansible.builtin.copy:
         src: ssh/config
         dest: "{{ lookup('env', 'HOME') }}/.ssh/config"
         mode: 0600
       tags: github
-
-    - name: 6/6] Switch .ini repo from HTTPS to SSH
+  
+    - name: 6/8] Switch this repo from HTTPS to SSH
       community.general.git_config:
         name: remote.origin.url
         value: "git@github.com:curelesss/.ini.git"
         scope: local
-        repo: "{{ ansible_env.HOME }}/.ini"
-      # This ensures the task only runs if the directory actually exists
-      when: (ansible_env.HOME + '/.ini') is directory
+        repo: "{{ lookup('env', 'HOME') }}/.ini"
+      # Parentheses ensure the path string is built before checking 'is directory'
+      when: (lookup('env', 'HOME') + '/.ini') is directory
+
+    - name: 7/8] Check if github.com is already in known_hosts
+      ansible.builtin.shell: "ssh-keygen -F github.com"
+      register: github_known
+      failed_when: false
+      changed_when: false
+
+    - name: 8/8] Add GitHub to known_hosts
+      ansible.builtin.known_hosts:
+        name: github.com
+        key: "{{ lookup('pipe', 'ssh-keyscan -t ed25519 github.com') }}"
+        state: present
+      when: github_known.rc != 0
