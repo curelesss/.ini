@@ -9,7 +9,7 @@ set -euo pipefail
 # List of "repo_url destination_path" pairs
 REPOS=(
     "git@github.com:curelesss/.init.git    $HOME/.init"
-    "git@github.com:curelesss/.arch.git    $HOME/.arch"
+    "git@github.com:curelesss/.password-store.git    $HOME/.password-store"
     "git@github.com:curelesss/.dotfiles.git $HOME/.dotfiles"
     "git@github.com:curelesss/dotfiles.git  $HOME/dotfiles"
 )
