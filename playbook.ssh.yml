@@ -6,6 +6,20 @@
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
 
   tasks:
+    - name: 1/1] Update pacman package cache (sync repositories)
+      become: yes
+      community.general.pacman:
+        update_cache: yes       # equivalent to pacman -Sy
+      changed_when: false
+
+    - name: 1/1] Install openssh and unzip
+      become: yes
+      community.general.pacman:
+        name:
+          - openssh             # for task 8 of this book, 'ssh-keyscan' command
+          - unzip               # for install gpg key
+        state: present
+
     - name: 1/8] git Email
       git_config:
         name: user.email
