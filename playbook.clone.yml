@@ -5,9 +5,6 @@
 
   vars:
     repos:
-      - repo: "git@github.com:curelesss/.init.git"
-        dest: "{{ ansible_facts['env']['HOME'] }}/.init"
-
       - repo: "git@github.com:curelesss/.password-store.git"
         dest: "{{ ansible_facts['env']['HOME'] }}/.password-store"
 
