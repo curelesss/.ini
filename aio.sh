@@ -1,1 +1,1 @@
-ansible-playbook playbook.yml --ask-become-pass --ask-vault-pass
+ansible-playbook playbook.yml -K -J

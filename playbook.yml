@@ -1,11 +1,11 @@
 ---
 # site.yml – main orchestrator playbook
 
-- name: Prepare base system (users, ssh, packages)
+- name: Setup git config & Github SSH
   import_playbook: playbook.ssh.yml
 
-- name: Set up database servers
+- name: Clone dotfiles and passowrd repos
   import_playbook: playbook.clone.yml
 
-- name: Set up database servers2
+- name: Setup gnupg keys
   import_playbook: playbook.gpg.yml
