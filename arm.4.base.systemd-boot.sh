@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Show available disks
+echo "Available disks:"
+lsblk
+echo ""
+
 # Step 18 — Install and configure systemd-boot
 
 # Detect partition naming (sda1 vs nvme0n1p1)
