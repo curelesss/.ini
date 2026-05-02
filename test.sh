@@ -1,7 +1,13 @@
 #!/bin/bash
 
+# Show available disks
+echo "Available disks:"
+lsblk
+echo ""
+
 read -p "Enter disk (e.g. /dev/sda or /dev/nvme0n1): " DISK
 
+echo ""
 echo "WARNING: This will erase all data on $DISK"
 read -p "Are you sure? (yes/no): " CONFIRM
 if [ "$CONFIRM" != "yes" ]; then
