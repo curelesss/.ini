@@ -25,3 +25,8 @@ genfstab -U /mnt > /mnt/etc/fstab
 echo ""
 echo "fstab contents:"
 cat /mnt/etc/fstab
+
+# Drop into chroot
+echo ""
+echo "Entering chroot..."
+arch-chroot /mnt
