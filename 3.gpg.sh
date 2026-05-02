@@ -1,1 +1,1 @@
-ansible-playbook book.3.general.gpg.yml -K -J
+ansible-playbook pb.3.gpg.yml -K -J
