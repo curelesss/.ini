@@ -28,7 +28,8 @@ systemctl is-enabled gdm
 
 # Step 21 — Exit chroot and shutdown
 echo ""
-echo "Exiting chroot and shutting down..."
-exit
+echo "using `exit` to quit chroot"
+echo " umount -R /mnt "
+echo " reboot "
 
-umount -R /mnt
+
