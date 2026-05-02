@@ -20,7 +20,7 @@ fi
 
 # Install systemd-boot (idempotent — bootctl handles reinstall safely)
 echo "Installing systemd-boot..."
-bootctl install --force
+bootctl install
 
 # Get UUID of root partition
 UUID=$(blkid -s UUID -o value $PART2)
