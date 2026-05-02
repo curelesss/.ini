@@ -7,6 +7,7 @@ systemctl enable NetworkManager
 # Step 20 — Install GNOME desktop
 echo ""
 echo "Installing GNOME desktop..."
+pacman -Syy
 pacman -S --noconfirm \
   gdm \
   gnome \
@@ -31,4 +32,3 @@ echo "Exiting chroot and shutting down..."
 exit
 
 umount -R /mnt
-shutdown now
