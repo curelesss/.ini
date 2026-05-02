@@ -28,10 +28,37 @@ cat > /etc/hosts << EOF
 127.0.1.1   archlinux.localdomain archlinux
 EOF
 
+# Step 16 — Set root password
 echo ""
-echo "Done. Verify:"
-echo "  cat /etc/pacman.conf | grep SigLevel"
-echo "  cat /etc/localtime"
-echo "  cat /etc/locale.conf"
-echo "  cat /etc/hostname"
-echo "  cat /etc/hosts"
+echo "Setting root password..."
+passwd
+
+# Step 17 — Create user with sudo access
+echo ""
+read -p "Enter username to create: " USERNAME
+
+# Create user if not exists, or modify if exists
+if id "$USERNAME" &> /dev/null; then
+  echo "User $USERNAME already exists, updating groups and shell..."
+  usermod -aG wheel -s /bin/bash $USERNAME
+else
+  echo "Creating user $USERNAME..."
+  useradd -m -G wheel -s /bin/bash $USERNAME
+fi
+
+echo "Setting password for $USERNAME..."
+passwd $USERNAME
+
+# Enable wheel group in sudoers (idempotent)
+echo ""
+echo "Configuring sudo..."
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+# Verify
+echo ""
+echo "Verifying..."
+echo "User groups:"
+groups $USERNAME
+echo ""
+echo "Sudoers wheel entry:"
+grep wheel /etc/sudoers
