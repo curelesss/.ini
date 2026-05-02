@@ -21,17 +21,53 @@ if ! command -v parted &> /dev/null; then
   pacman -Sy --noconfirm parted
 fi
 
-# Create GPT partition table
-parted -s $DISK mklabel gpt
+# Detect partition naming (sda1 vs nvme0n1p1)
+if [[ $DISK == *"nvme"* ]]; then
+  PART1="${DISK}p1"
+  PART2="${DISK}p2"
+else
+  PART1="${DISK}1"
+  PART2="${DISK}2"
+fi
 
-# Partition 1: 512M EFI System
+# Reset — unmount and wipe disk to clean state
+echo ""
+echo "Resetting $DISK to clean state..."
+
+umount $PART1 2>/dev/null || true
+umount $PART2 2>/dev/null || true
+umount -R /mnt 2>/dev/null || true
+
+wipefs -a $DISK
+
+# Step 6 — Partition the disk
+echo ""
+echo "Partitioning $DISK..."
+
+parted -s $DISK mklabel gpt
 parted -s $DISK mkpart EFI fat32 1MiB 513MiB
 parted -s $DISK set 1 esp on
-
-# Partition 2: remaining space Linux filesystem
 parted -s $DISK mkpart ROOT ext4 513MiB 100%
+
+echo "Partition table created:"
+parted -s $DISK print
+
+# Step 7 — Format the partitions
+echo ""
+echo "Formatting partitions..."
+
+mkfs.fat -F32 $PART1
+mkfs.ext4 -F $PART2
+
+# Step 8 — Mount the partitions
+echo ""
+echo "Mounting partitions..."
+
+mount $PART2 /mnt
+mkdir -p /mnt/boot
+mount $PART1 /mnt/boot
 
 # Verify
 echo ""
-echo "Partition table created:"
-parted -s $DISK print
+echo "Mounted partitions:"
+df -h | grep /mnt
