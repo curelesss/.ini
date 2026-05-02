@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sed -i 's/^SigLevel.*/SigLevel = Never/' /etc/pacman.conf
+
 # Show available disks
 echo "Available disks:"
 lsblk
